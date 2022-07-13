@@ -13,7 +13,7 @@ import java.util.*;
 public class FixingPublisherDataApplication {
 
 	//extracts data needed to update database
-	private static void parseLine(String input, List<Publisher> publishers, ObjectMapper mapper, File outFile) throws IOException {
+	private static void parseLine(String input, List<Publisher> publishers) {
 
 		//split input line
 		String[] split1 = input.split(" ");
@@ -27,13 +27,13 @@ public class FixingPublisherDataApplication {
 		//stores file path
 		data[1] = split2[1] + "-" + split2[2] + "-" + split2[3] + "-" + split2[4] + "-" + split2[5];
 		//System.out.println(Arrays.toString(data));
-		modifyJSON(data, publishers, mapper, outFile);
+		modifyJSON(data, publishers);
 	}
 
 
 
 	//updates database
-	public static void modifyJSON(String[] data, List<Publisher> publishers, ObjectMapper mapper, File outFile) throws IOException {
+	public static void modifyJSON(String[] data, List<Publisher> publishers) {
 
 		for (Publisher p : publishers) {
 			if (p.code.equalsIgnoreCase(data[0])) {
@@ -53,7 +53,7 @@ public class FixingPublisherDataApplication {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		InputStream inputStream = new FileInputStream("A:\\Users\\zakth\\Documents\\Projects\\FixingPublisherData\\FixingPublisherData\\src\\testDatabasePublishers.json");
-		TypeReference<List<Publisher>> typeReference = new TypeReference<List<Publisher>>() {};
+		TypeReference<List<Publisher>> typeReference = new TypeReference<>() {};
 		List<Publisher> publishers = mapper.readValue(inputStream, typeReference);
 		inputStream.close();
 
@@ -64,7 +64,7 @@ public class FixingPublisherDataApplication {
 		File outFile = new File("A:\\Users\\zakth\\Documents\\Projects\\FixingPublisherData\\FixingPublisherData\\src\\updatedPublishers.json");
 
 		while (scanner.hasNextLine()) {
-			parseLine(scanner.nextLine(), publishers, mapper, outFile);
+			parseLine(scanner.nextLine(), publishers);
 		}
 		mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, publishers);
 	}
