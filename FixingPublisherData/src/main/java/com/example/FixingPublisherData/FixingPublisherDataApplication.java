@@ -59,16 +59,15 @@ public class FixingPublisherDataApplication {
 		Scanner scanner = new Scanner(updates);
 		
 		//create output file
-		File outFile = null;
+		File outFile = new File("updatedPublishers.json");
 		while (scanner.hasNextLine()) {
 			parseLine(scanner.nextLine(), publishers);
 		}
 		mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, publishers);
-
 		return outFile;
 	}
 
-	public static void main(String[] args)  {
+	public static void main(String[] args) {
 
 		SpringApplication.run(FixingPublisherDataApplication.class, args);
 
@@ -92,5 +91,7 @@ public class FixingPublisherDataApplication {
 		}
 		mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, publishers);
 		*/
+
+
 	}
 }

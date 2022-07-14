@@ -6,10 +6,11 @@
 </head>
 <body>
     <form method="post" action="fileServlet" enctype="multipart/form-data">
-        <label for="database">Submit a File to Update the Database</label>
-        <input type="file" id="database" name="database" accept=".json">
+        <label for="database">Submit a File of the Current Database</label>
+        <input type="file" id="database" name="database" accept=".json"><br>
         <label for="update">Submit a File to Update the Database</label>
         <input type="file" id="update" name="update" accept=".txt">
+        <button type="submit">Submit</button>
     </form>
 </body>
 </html>
