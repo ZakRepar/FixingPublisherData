@@ -12,6 +12,7 @@ import java.util.*;
 @SpringBootApplication
 public class FixingPublisherDataApplication {
 
+
 	//extracts data needed to update database
 	private static void parseLine(String input, List<Publisher> publishers) {
 
@@ -33,7 +34,7 @@ public class FixingPublisherDataApplication {
 
 
 	//updates database
-	public static void modifyJSON(String[] data, List<Publisher> publishers) {
+	private static void modifyJSON(String[] data, List<Publisher> publishers) {
 
 		for (Publisher p : publishers) {
 			if (p.code.equalsIgnoreCase(data[0])) {
@@ -44,11 +45,34 @@ public class FixingPublisherDataApplication {
 	}
 
 
+	
+	public static File updateDatabase(File currentDatabase, File updates) throws IOException {
 
-	public static void main(String[] args) throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		InputStream inputStream = new FileInputStream(currentDatabase);
+		TypeReference<List<Publisher>> typeReference = new TypeReference<>() {};
+		List<Publisher> publishers = mapper.readValue(inputStream, typeReference);
+		inputStream.close();
+
+		//read in update data
+		Scanner scanner = new Scanner(updates);
+		
+		//create output file
+		File outFile = null;
+		while (scanner.hasNextLine()) {
+			parseLine(scanner.nextLine(), publishers);
+		}
+		mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, publishers);
+
+		return outFile;
+	}
+
+	public static void main(String[] args)  {
 
 		SpringApplication.run(FixingPublisherDataApplication.class, args);
 
+		/*
 		//retrieve json publisher data
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -67,5 +91,6 @@ public class FixingPublisherDataApplication {
 			parseLine(scanner.nextLine(), publishers);
 		}
 		mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, publishers);
+		*/
 	}
 }
